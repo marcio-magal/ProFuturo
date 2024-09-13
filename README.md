@@ -1,0 +1,1 @@
+A ProFuturo é uma plataforma de vídeos para ajudar professores a integrar tecnologias no ensino, permitindo interação com vídeos organizados em playlists gerenciadas por administradores. Projeto desenvolvido durante a disciplina Laboratório para Produção e Avaliação de Software no curso de Licenciatura da Computação da Universidade Federal Rural da Amazônia.
