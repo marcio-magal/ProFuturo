@@ -2,9 +2,43 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>ProFuturo</title>
+
+    <style>
+        /* Estilo para o container principal */
+        .video-container {
+            display: flex;          /* Organiza os elementos em linha */
+            gap: 10px;              /* Espaço entre os vídeos */
+            justify-content: center; /* Centraliza os vídeos na página */
+            flex-wrap: wrap;        /* Permite que os vídeos fiquem em várias linhas se necessário */
+        }
+        /* Estilo para cada vídeo */
+        .video {
+            flex: 1 1 300px;        /* Define a largura mínima de 300px e ajusta conforme o tamanho da tela */
+            max-width: 320px;       /* Largura máxima de cada vídeo */
+        }
+    </style>
 </head>
+
 <body>
-<h1>Página Inicial</h1>
+
+<h1>ProFuturo</h1>
+<br>
+<h3>Teste integração de vídeos...</h3>
+    <table>
+        <tr>
+            <td>
+                <iframe width="480" height="270" src="https://www.youtube.com/embed/D4BJyL-Vy-Y?si=wkd_PpXVAqWWZCyW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </td>
+            <td>
+                <iframe width="480" height="270" src="https://www.youtube.com/embed/osIrS1d3uOs?si=iVKg8MdTzNASMrS0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </td>
+            <td>
+                <iframe width="480" height="270" src="https://www.youtube.com/embed/MXebO-DXxwA?si=R0ELPm57f-zPhhX1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
