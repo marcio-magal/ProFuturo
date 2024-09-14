@@ -1,1 +1,1 @@
-web: gunicorn proFuturo:app
+web: gunicorn proFuturo:application
