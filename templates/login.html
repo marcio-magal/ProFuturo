@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt=br">
 <head>
@@ -14,10 +15,10 @@
     <script type="text/javascript" src="js/script.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
-<body>
+<body style="background-color: #041453; color: white">
     <div id="container">
         <div class="banner">
-            <img src="img/login.png" alt="imagem-login">
+            <img src="{% static 'logo.png' %}" alt="ProFuturo" width="300" height="auto">
             <p style="color: #fff; font-weight: 400;">
                 Seja bem vindo, acesse e aproveite todo o conteúdo,
                 <br>somos uma equipe de profissionais empenhados em
@@ -45,8 +46,7 @@
                 <a href="account.html">
                     <p>Criar uma conta</p>
                 </a>
-
-               
+                
             </div>
         </div>
     </div>
