@@ -149,23 +149,23 @@
         </li>
       </ul>
     </div>
-    
+
 <main class="form-signin w-100 m-auto">
   <form>
     <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="290" height="">
     <h3 align="center">Por favor, cadastre-se</h3>
-      <p>____________________ou______________________</p>
-      <a href="/login/"><p align="center">Faça login</p></a>
+      <p>_____________________ou_____________________</p>
+      <a href="/accounts/login"><p align="center">Faça login</p></a>
     <div class="form-floating">
-      <input type="text" class="form-control" id="floatingUsername" placeholder="Nome:">
+      <input type="text" class="form-control" id="floatingUsername" name="username" placeholder="Nome:">
       <label for="floatingUsername">Nome</label>
     </div>
     <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" placeholder="Email:">
+      <input type="email" class="form-control" id="floatingInput" name="email" placeholder="Email:">
       <label for="floatingInput">E-mail</label>
     </div>
     <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Senha">
+      <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Senha">
       <label for="floatingPassword">Senha</label>
     </div>
 
@@ -176,7 +176,10 @@
       </label>
     </div>
     <button class="btn btn-primary w-100 py-2" type="submit">Cadastrar</button>
-    
+
+      {% for k, v in form.erros.items %}
+        {{ v }}
+      {% endfor %}  
   </form>
     <div align="center">
         <p class="mt-5 mb-3 text-body-secondary">&copy; UFRA - 2024</p>

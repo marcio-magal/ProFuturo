@@ -7,6 +7,11 @@
 <body>
 
     <h1>Página de Perfil</h1>
+    
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
 
 </body>
 </html>
