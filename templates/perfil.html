@@ -150,22 +150,30 @@
       </ul>
     </div>
     
-<main class="form-signin w-100 m-auto">
-    <img style="padding: 50px" class="mb-4" src="{% static 'img/perfil.png' %}" alt="" width="290" height="">
-  <div class="form-floating">
-    <p align="center"><strong>Username:</strong> {{ user.username }}</p>
-  </div>
-  
-  <div class="form-floating">
-    <p align="center"><strong>E-mail:</strong> {{ user.email }}</p>
-  </div>
-    <br>    
-  <div align="center">
-    <a href="{% url 'editar' %}" class="btn btn-primary">Atualizar Meus Dados</a>
-  </div>
-    <br><br><br>
-</main>
-
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <main class="form-signin w-100 m-auto">
+        <img style="padding: 50px" class="mb-4" src="{% static 'img/perfil.png' %}" alt="" width="290" height="">
+      <div class="form-floating">
+        <p align="center"><strong>Username:</strong> {{ user.username }}</p>
+      </div>
+    
+      <div class="form-floating">
+        <p align="center"><strong>E-mail:</strong> {{ user.email }}</p>
+      </div>
+        <br>
+      <div align="center">
+        <a href="{% url 'editar' %}" class="btn btn-primary">Atualizar Meus Dados</a>
+      </div>
+        <br><br><br>
+        
+        <div align="center">
+            <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Sair</button>
+            </form>
+        </div>
+        
+    </main>
+    
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     </body>
 </html>
