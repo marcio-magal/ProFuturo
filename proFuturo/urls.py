@@ -11,7 +11,8 @@ urlpatterns = [
     path('perfil/', include('perfil.urls')),
     path('playlist/', include('playList.urls')),
 
-    path('accounts/', include('django.contrib.auth.urls'))
+    path('accounts/', include('django.contrib.auth.urls')),
+
 ]
 if settings.DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
