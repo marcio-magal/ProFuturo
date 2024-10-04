@@ -151,32 +151,53 @@
     </div>
     
     <main class="form-signin w-100 m-auto">
-    {% if user.perfil.imagem_perfil %}
-        <img style="padding: 50px" class="mb-4" src="{{ user.perfil.imagem_perfil.url }}" alt="Imagem de Perfil" width="290" height="">
-    {% else %}
-        <img style="padding: 50px" class="mb-4" src="{% static 'img/perfil.png' %}" alt="Imagem de Perfil Padrão" width="290" height="">
-    {% endif %}
+        <style>
+            .perfil-container {
+                display: flex;
+                justify-content: center; /* Centraliza horizontalmente */
+                align-items: center; /* Centraliza verticalmente, caso necessário */
+                flex-direction: column; /* Coloca o conteúdo em coluna (imagem + texto) */
+            }
     
-    <div class="form-floating">
-        <p align="center"><strong>Username:</strong> {{ user.username }}</p>
-    </div>
-
-    <div class="form-floating">
-        <p align="center"><strong>E-mail:</strong> {{ user.email }}</p>
-    </div>
-    <br>
-    <div align="center">
-        <a href="{% url 'editar' %}" class="btn btn-primary">Atualizar Meus Dados</a>
-    </div>
-    <br><br><br>
-
-    <div align="center">
-        <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Sair</button>
-        </form>
-    </div>
-</main>
+            .perfil-imagem {
+                width: 150px; /* Ajuste o tamanho da imagem */
+                height: 150px;
+                border-radius: 50%; /* Torna a imagem circular */
+                object-fit: cover; /* Corta a imagem para preencher o espaço */
+                object-position: top; /* Mostra a parte superior da imagem */
+                padding: 10px;
+            }
+        </style>
+    
+        <div class="perfil-container">
+            {% if user.perfil.imagem_perfil %}
+                <img class="perfil-imagem mb-4" src="{{ user.perfil.imagem_perfil.url }}" alt="Imagem de Perfil">
+            {% else %}
+                <img class="perfil-imagem mb-4" src="{% static 'img/perfil.png' %}" alt="Imagem de Perfil Padrão">
+            {% endif %}
+            
+            <div class="form-floating">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+            </div>
+    
+            <div class="form-floating">
+                <p><strong>E-mail:</strong> {{ user.email }}</p>
+            </div>
+    
+            <br>
+            <div>
+                <a href="{% url 'editar' %}" class="btn btn-primary">Atualizar Meus Dados</a>
+            </div>
+            <br><br><br>
+    
+            <div>
+                <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Sair</button>
+                </form>
+            </div>
+        </div>
+    </main>
     
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     </body>

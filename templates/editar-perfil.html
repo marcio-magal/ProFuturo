@@ -150,47 +150,76 @@
       </ul>
     </div>
 
-<main class="form-signin w-100 m-auto">
-  <form action="{% url 'editar' %}" method="POST" enctype="multipart/form-data">  <!-- Adicionado enctype -->
-    {% csrf_token %}
-    <img class="mb-4" src="{% if perfil and perfil.imagem_perfil %}{{ perfil.imagem_perfil.url }}{% else %}{% static 'img/perfil.png' %}{% endif %}" alt="Imagem de Perfil" width="290" height="">
+    <main class="form-signin w-100 m-auto">
+        <style>
+            .perfil-imagem {
+                width: 300px; /* Ajuste o tamanho da imagem */
+                height: 300px;
+                border-radius: 50%; /* Torna a imagem circular */
+                object-fit: cover; /* Corta a imagem para preencher o espaço */
+                object-position: top; /* Mostra a parte superior da imagem */
+            }
+        </style>
 
-    <div class="form-floating">
-      <input type="text" class="form-control" id="floatingUsername" name="username" value="{{ user.username }}" placeholder="Nome:">
-      <label for="floatingUsername">Username</label>
-    </div>
-
-    <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" name="email" value="{{ user.email }}" placeholder="Email:">
-      <label for="floatingInput">E-mail</label>
-    </div>
-
-    <div class="form-group">
-      <label for="id_imagem_perfil">Imagem de Perfil:</label>
-      <input type="file" name="imagem_perfil" id="id_imagem_perfil" class="form-control">
-    </div>
+        <form action="{% url 'editar' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="text-center">  <!-- Centraliza a imagem -->
+                <!-- Exibe a imagem atual ou padrão -->
+                <img id="imagem-preview" class="perfil-imagem mb-4" src="{% if perfil and perfil.imagem_perfil %}{{ perfil.imagem_perfil.url }}{% else %}{% static 'img/perfil.png' %}{% endif %}" alt="Imagem de Perfil">
+            </div>
+        
+            <div class="form-group">
+                <input type="file" name="imagem_perfil" id="id_imagem_perfil" class="form-control" accept="image/*" onchange="previewImage(event)">
+            </div>
+            <br>
+        
+            <div class="form-floating">
+                <input type="text" class="form-control" id="floatingUsername" name="username" value="{{ user.username }}" placeholder="Nome:">
+                <label for="floatingUsername">Username</label>
+            </div>
     
-    <br>
-    <button class="btn btn-primary w-100 py-2" type="submit">Atualizar</button>
+            <div class="form-floating">
+                <input type="email" class="form-control" id="floatingInput" name="email" value="{{ user.email }}" placeholder="Email:">
+                <label for="floatingInput">E-mail</label>
+            </div>
+    
+            <br>
+            <button class="btn btn-primary w-100 py-2" type="submit">Atualizar</button>
+    
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </form>
+        
+        <div align="center">
+            <p class="mt-5 mb-3 text-body-secondary">&copy; UFRA - 2024</p>
+        </div>
+    
+        <!-- JavaScript para pré-visualização da imagem -->
+        <script>
+            function previewImage(event) {
+                const input = event.target;
+                const preview = document.getElementById('imagem-preview');
+                const file = input.files[0];
+                
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        </script>
+    </main>
 
-    {% if form.errors %}
-      <div class="alert alert-danger">
-        {% for field in form %}
-          {% for error in field.errors %}
-            <p>{{ error }}</p>
-          {% endfor %}
-        {% endfor %}
-      </div>
-    {% endif %}
-  </form>
-  
-  <div align="center">
-    <p class="mt-5 mb-3 text-body-secondary">&copy; UFRA - 2024</p>
-  </div>
-</main>
-
-
-
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     </body>
 </html>
