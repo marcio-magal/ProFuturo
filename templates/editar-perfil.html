@@ -151,21 +151,28 @@
     </div>
 
 <main class="form-signin w-100 m-auto">
-  <form action="{% url 'editar' %}" method="POST"> {% csrf_token %}
-    <img class="mb-4" src="{% static 'img/perfil.png' %}" alt="" width="290" height="">
-    
+  <form action="{% url 'editar' %}" method="POST" enctype="multipart/form-data">  <!-- Adicionado enctype -->
+    {% csrf_token %}
+    <img class="mb-4" src="{% if perfil and perfil.imagem_perfil %}{{ perfil.imagem_perfil.url }}{% else %}{% static 'img/perfil.png' %}{% endif %}" alt="Imagem de Perfil" width="290" height="">
+
     <div class="form-floating">
       <input type="text" class="form-control" id="floatingUsername" name="username" value="{{ user.username }}" placeholder="Nome:">
       <label for="floatingUsername">Username</label>
     </div>
+
     <div class="form-floating">
       <input type="email" class="form-control" id="floatingInput" name="email" value="{{ user.email }}" placeholder="Email:">
       <label for="floatingInput">E-mail</label>
     </div>
+
+    <div class="form-group">
+      <label for="id_imagem_perfil">Imagem de Perfil:</label>
+      <input type="file" name="imagem_perfil" id="id_imagem_perfil" class="form-control">
+    </div>
     
-    <br>    
+    <br>
     <button class="btn btn-primary w-100 py-2" type="submit">Atualizar</button>
-    
+
     {% if form.errors %}
       <div class="alert alert-danger">
         {% for field in form %}
@@ -176,11 +183,13 @@
       </div>
     {% endif %}
   </form>
-<br><br><br>
+  
   <div align="center">
     <p class="mt-5 mb-3 text-body-secondary">&copy; UFRA - 2024</p>
   </div>
 </main>
+
+
 
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     </body>

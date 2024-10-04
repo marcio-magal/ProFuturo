@@ -151,28 +151,32 @@
     </div>
     
     <main class="form-signin w-100 m-auto">
-        <img style="padding: 50px" class="mb-4" src="{% static 'img/perfil.png' %}" alt="" width="290" height="">
-      <div class="form-floating">
-        <p align="center"><strong>Username:</strong> {{ user.username }}</p>
-      </div>
+    {% if user.perfil.imagem_perfil %}
+        <img style="padding: 50px" class="mb-4" src="{{ user.perfil.imagem_perfil.url }}" alt="Imagem de Perfil" width="290" height="">
+    {% else %}
+        <img style="padding: 50px" class="mb-4" src="{% static 'img/perfil.png' %}" alt="Imagem de Perfil Padrão" width="290" height="">
+    {% endif %}
     
-      <div class="form-floating">
+    <div class="form-floating">
+        <p align="center"><strong>Username:</strong> {{ user.username }}</p>
+    </div>
+
+    <div class="form-floating">
         <p align="center"><strong>E-mail:</strong> {{ user.email }}</p>
-      </div>
-        <br>
-      <div align="center">
+    </div>
+    <br>
+    <div align="center">
         <a href="{% url 'editar' %}" class="btn btn-primary">Atualizar Meus Dados</a>
-      </div>
-        <br><br><br>
-        
-        <div align="center">
-            <form method="POST" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Sair</button>
-            </form>
-        </div>
-        
-    </main>
+    </div>
+    <br><br><br>
+
+    <div align="center">
+        <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Sair</button>
+        </form>
+    </div>
+</main>
     
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     </body>
