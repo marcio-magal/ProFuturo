@@ -14,7 +14,9 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 
-<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/fontawesome/css/all.min.css' %}">
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
     <style>
       .bd-placeholder-img {
@@ -156,6 +158,7 @@
                 width: 300px; /* Ajuste o tamanho da imagem */
                 height: 300px;
                 border-radius: 50%; /* Torna a imagem circular */
+                border: 1px solid #212529;
                 object-fit: cover; /* Corta a imagem para preencher o espaço */
                 object-position: top; /* Mostra a parte superior da imagem */
                 position: relative; /* Necessário para o ícone */
@@ -174,8 +177,8 @@
                 cursor: pointer;
                 font-size: 20px;
                 /* Posicionamento na área de 5 horas (parte interna) */
-                bottom: 21%;  /* Ajuste para descer um pouco */
-                right: 21%;   /* Ajuste para ficar mais à direita */
+                bottom: 12%;  /* Ajuste para descer um pouco */
+                right: 12%;   /* Ajuste para ficar mais à direita */
             }
         </style>
     
@@ -196,7 +199,7 @@
             <div class="form-group" style="display: none;">
                 <input type="file" name="imagem_perfil" id="id_imagem_perfil" class="form-control" accept="image/*" onchange="previewImage(event)">
             </div>
-    
+            <br>
             <div class="form-floating">
                 <input type="text" class="form-control" id="floatingUsername" name="username" value="{{ user.username }}" placeholder="Nome:">
                 <label for="floatingUsername">Username</label>
@@ -242,8 +245,6 @@
             }
         </script>
     </main>
-
-    <link rel="stylesheet" href="{% static 'css/fontawesome/css/all.min.css' %}">
     
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     </body>
