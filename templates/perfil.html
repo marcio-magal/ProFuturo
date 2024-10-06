@@ -175,25 +175,29 @@
             {% else %}
                 <img class="perfil-imagem mb-4" src="{% static 'img/perfil.png' %}" alt="Imagem de Perfil Padrão">
             {% endif %}
-            
+    
             <div class="form-floating">
                 <p><strong>Username:</strong> {{ user.username }}</p>
             </div>
     
-            <div class="form-floating">
-                <p><strong>E-mail:</strong> {{ user.email }}</p>
-            </div>
-    
+            <!-- Exibe o campo de e-mail apenas se o usuário tiver um e-mail cadastrado -->
+            {% if user.email %}
+                <div class="form-floating">
+                    <p><strong>E-mail:</strong> {{ user.email }}</p>
+                </div>
+            {% endif %}
+        
             <br>
             <div>
                 <a href="{% url 'editar' %}" class="btn btn-primary">Atualizar Meus Dados</a>
             </div>
             <br><br><br>
+            <br><br><br>
     
             <div>
                 <form method="POST" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit">Sair</button>
+                    {% csrf_token %}
+                    <button class="btn btn-info rounded-pill px-3" type="submit">Sair</button>
                 </form>
             </div>
         </div>

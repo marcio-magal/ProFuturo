@@ -12,8 +12,8 @@ def cadastro(request):
 
         # Verificar se já existe um usuário com o username
         if User.objects.filter(username=username).exists():
-            messages.error(request, "Já existe um usuário com esse username.")
-            return render(request, 'registration/cadastro.html')
+            error_message = "Já existe um usuário com esse username."
+            return render(request, 'registration/cadastro.html', {'error': error_message})
 
         # Criar o usuário
         user = User.objects.create_user(username=username, email=email, password=senha)

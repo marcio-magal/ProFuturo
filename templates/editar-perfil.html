@@ -197,12 +197,16 @@
             <div class="form-group" style="display: none;">
                 <input type="file" name="imagem_perfil" id="id_imagem_perfil" class="form-control" accept="image/*" onchange="previewImage(event)">
             </div>
-        
-            <br>
+
             <div class="form-floating">
                 <input type="text" class="form-control" id="floatingUsername" name="username" value="{{ user.username }}" placeholder="Nome:" required>
                 <label for="floatingUsername">Username</label>
             </div>
+        
+            <!-- Exibe erro se houver -->
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
         
             <div class="form-floating">
                 <input type="email" class="form-control" id="floatingInput" name="email" value="{{ user.email }}" placeholder="Email:">
@@ -212,10 +216,6 @@
             <br>
             <button class="btn btn-primary w-100 py-2" type="submit">Atualizar</button>
         
-            <!-- Exibe erro se houver -->
-            {% if error %}
-                <div class="alert alert-danger">{{ error }}</div>
-            {% endif %}
         </form>
     
         <div align="center">

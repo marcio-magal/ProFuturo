@@ -151,39 +151,44 @@
     </div>
     
     <main class="form-signin w-100 m-auto">
-        <form action="{% url 'cadastro' %}" method="POST" enctype="multipart/form-data"> 
+        <form action="{% url 'cadastro' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <img class="mb-4" src="{% static 'img/logo.png' %}" alt="" width="293" height="">
 
             <h5>Por favor, cadastre-se</h5>
-    
+
             <div class="form-floating">
                 <input type="text" class="form-control" id="floatingUsername" name="username" placeholder="Nome:" required>
                 <label for="floatingUsername">Username</label>
             </div>
-    
+
+            <!-- Exibe erro se houver -->
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+
             <div class="form-floating">
                 <input type="email" class="form-control" id="floatingInput" name="email" placeholder="Email:">
                 <label for="floatingInput">E-mail (opcional)</label>
             </div>
-    
+
             <div class="form-floating">
                 <input type="password" class="form-control" id="floatingPassword" name="senha" placeholder="Senha" required>
                 <label for="floatingPassword">Senha</label>
             </div>
-    
+
             <!-- Campo para imagem de perfil -->
             <div class="form-group">
                 <label for="id_imagem_perfil">Imagem de Perfil (opcional):</label>
                 <input type="file" name="imagem_perfil" id="id_imagem_perfil" class="form-control" accept="image/*" onchange="previewImage(event)">
             </div>
-            
+
             <br>
             <p>Já tem uma conta? <a href="/accounts/login">Faça login</a></p>
 
             <button class="btn btn-primary w-100 py-2" type="submit">Cadastrar</button>
         </form>
-    
+
         <div align="center">
             <p class="mt-5 mb-3 text-body-secondary">&copy; UFRA - 2024</p>
         </div>
