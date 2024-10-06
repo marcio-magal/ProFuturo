@@ -1,8 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.http import HttpResponse
-from cadastro.models import Perfil  # Certifique-se de importar o modelo correto
+from cadastro.models import Perfil
 from django.core.files.storage import default_storage
 
 @login_required
@@ -21,11 +20,16 @@ def editar(request):
     if request.method == "POST":
         new_username = request.POST.get('username')
         new_email = request.POST.get('email')
-        nova_imagem = request.FILES.get('imagem_perfil')  # Obtém o arquivo de imagem enviado
+        nova_imagem = request.FILES.get('imagem_perfil')
 
         # Verifica se o novo username já existe e não pertence ao usuário logado
         if User.objects.filter(username=new_username).exclude(pk=user.pk).exists():
-            return HttpResponse('Já existe um usuário com esse username')
+            # Se o username já existir, exibe uma mensagem de erro sem sair da página
+            return render(request, 'editar-perfil.html', {
+                'user': user,
+                'perfil': perfil,
+                'error': 'Já existe um usuário com esse username.'
+            })
 
         # Atualiza os dados do usuário
         user.username = new_username

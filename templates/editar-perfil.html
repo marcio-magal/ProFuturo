@@ -184,9 +184,7 @@
     
         <form action="{% url 'editar' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            
             <div class="text-center position-relative">  <!-- Centraliza a imagem e posiciona o ícone -->
-                <!-- Exibe a imagem atual ou padrão -->
                 <img id="imagem-preview" class="perfil-imagem mb-4" src="{% if perfil and perfil.imagem_perfil %}{{ perfil.imagem_perfil.url }}{% else %}{% static 'img/perfil.png' %}{% endif %}" alt="Imagem de Perfil">
                 
                 <!-- Ícone de lápis sobreposto na posição de 5 horas -->
@@ -199,28 +197,24 @@
             <div class="form-group" style="display: none;">
                 <input type="file" name="imagem_perfil" id="id_imagem_perfil" class="form-control" accept="image/*" onchange="previewImage(event)">
             </div>
+        
             <br>
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingUsername" name="username" value="{{ user.username }}" placeholder="Nome:">
+                <input type="text" class="form-control" id="floatingUsername" name="username" value="{{ user.username }}" placeholder="Nome:" required>
                 <label for="floatingUsername">Username</label>
             </div>
-    
+        
             <div class="form-floating">
                 <input type="email" class="form-control" id="floatingInput" name="email" value="{{ user.email }}" placeholder="Email:">
                 <label for="floatingInput">E-mail</label>
             </div>
-    
+        
             <br>
             <button class="btn btn-primary w-100 py-2" type="submit">Atualizar</button>
-    
-            {% if form.errors %}
-                <div class="alert alert-danger">
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    {% endfor %}
-                </div>
+        
+            <!-- Exibe erro se houver -->
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
             {% endif %}
         </form>
     
