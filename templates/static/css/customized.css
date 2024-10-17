@@ -1,0 +1,21 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    /*min-height: 100vh;*/
+}
+
+.main {
+    border-top: 3px solid #01205F;
+    flex: 1;
+    overflow-y: auto; /* Permite rolagem vertical */
+}
+
+footer {
+    padding-top: 20px;
+    text-align: center;
+}
