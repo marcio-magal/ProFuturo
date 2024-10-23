@@ -10,7 +10,7 @@ def index(request):
     playlists = Playlist.objects.all()
 
     # Crie o objeto Paginator e obtenha os vídeos da página solicitada
-    paginator = Paginator(video_list, 12)  # Carregar 12 vídeos por página
+    paginator = Paginator(video_list, 20)  # Carregar 12 vídeos por página
     page_number = request.GET.get('page')
     videos = paginator.get_page(page_number)
 
