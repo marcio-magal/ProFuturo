@@ -7,10 +7,14 @@ from django.urls import path, include
 
 from django.conf.urls.static import static
 
+from playList.views import playlist_detail
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('adm/', adm),
-    path('playlist/', playList),
+    path('playlist/', playList, name='playlist-list'),
+    path('playlist/<int:playlist_id>/', playList, name='playlist'),
+    path('playlist/<int:playlist_id>/', playlist_detail, name='playlist-detail'),  # Nova URL para cada playlist
     path('', index, name='home'),
     path('cadastro/', cadastro, name='cadastro'),
     path('perfil/', include('perfil.urls')),

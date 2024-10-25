@@ -1,5 +1,4 @@
 from django.db import models
-
 from urllib.parse import urlparse, parse_qs
 import requests
 
@@ -12,12 +11,29 @@ class Video(models.Model):
     def __str__(self):
         return self.title
 
-    def youtube_thumbnail(self):
-        # Extrai o ID do vídeo do YouTube a partir da URL
+    def youtube_id(self):
+        """
+        Extraia o ID do vídeo do YouTube, suportando URLs padrão e encurtadas.
+        """
         query = urlparse(self.url)
-        video_id = parse_qs(query.query).get("v")
+        if query.hostname == 'youtu.be':
+            return query.path[1:]
+        if query.hostname in ('www.youtube.com', 'youtube.com'):
+            if query.path == '/watch':
+                return parse_qs(query.query).get("v", [None])[0]
+            if query.path[:7] == '/embed/':
+                return query.path.split('/')[2]
+            if query.path[:3] == '/v/':
+                return query.path.split('/')[2]
+        return None
+
+    def youtube_thumbnail(self):
+        """
+        Obtenha a thumbnail do YouTube.
+        """
+        video_id = self.youtube_id()
         if video_id:
-            thumbnail_url = f"https://img.youtube.com/vi/{video_id[0]}/hqdefault.jpg"
+            thumbnail_url = f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg"
             try:
                 # Verifica se é possível acessar a URL da thumbnail
                 response = requests.head(thumbnail_url, timeout=5)

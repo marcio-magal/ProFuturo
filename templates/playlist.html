@@ -2,6 +2,42 @@
 
 {% block main %}
     
-    <h1>Página da PlayList</h1>
+    <h1>Página da PlayList: {{ playlist.name }}</h1>
+    
+    <iframe id="video-player"
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/{{ videos.0.youtube_id }}"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+    </iframe>
+
+    <h3>Vídeos da Playlist</h3>
+    <ul id="video-list">
+        {% for video in videos %}
+            <li>
+                <a href="#" class="video-link" data-video-id="{{ video.youtube_id }}">
+                    {{ video.title }}
+                </a>
+            </li>
+        {% empty %}
+            <p>Não há vídeos nesta playlist.</p>
+        {% endfor %}
+    </ul>
+
+    <script>
+        // Script para trocar o vídeo do iframe
+        document.querySelectorAll('.video-link').forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const videoId = this.getAttribute('data-video-id');
+                const iframe = document.getElementById('video-player');
+                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+            });
+        });
+    </script>
     
 {% endblock %}

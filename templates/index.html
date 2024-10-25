@@ -11,15 +11,23 @@
     
       .playlist-carousel {
           display: flex;
-          overflow-x: hidden;
+          overflow-x: scroll; /* Permite rolagem horizontal */
           scroll-behavior: smooth;
           gap: 20px;
           padding-top: 5px;
           padding-left: 10px;
           padding-bottom: 25px;
+            
+          /* Oculta a barra de rolagem */
+          -ms-overflow-style: none;  /* Para Internet Explorer e Edge */
+          scrollbar-width: none;     /* Para Firefox */
       }
+        
+        .playlist-carousel::-webkit-scrollbar {
+          display: none;  /* Para Chrome, Safari e Opera */
+        }
     
-      .playlist-item {
+        .playlist-item {
           min-width: 28%;
           border: 1px solid #ccc;
           border-radius: 8px;
@@ -28,6 +36,15 @@
           background-color: #f9f9f9;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           transition: transform 0.2s, box-shadow 0.2s;
+          position: relative; /* Para conter o link */
+      }
+      
+      .playlist-link {
+          display: block;
+          color: inherit; /* Mantém a cor do texto */
+          text-decoration: none; /* Remove sublinhado */
+          height: 100%; /* Preenche todo o item */
+          width: 100%; /* Preenche todo o item */
       }
     
       .playlist-item:hover {
@@ -120,8 +137,10 @@
             <div class="playlist-carousel">
                 {% for playlist in playlists %}
                     <div class="playlist-item">
-                        <img src="{{ playlist.get_default_thumbnail }}" alt="{{ playlist.name }}" class="playlist-thumbnail">
-                        <h3>{{ playlist.name }}</h3>
+                        <a href="{% url 'playlist-detail' playlist.id %}" class="playlist-link">
+                            <img src="{{ playlist.get_default_thumbnail }}" alt="{{ playlist.name }}" class="playlist-thumbnail">
+                            <h3>{{ playlist.name }}</h3>
+                        </a>
                     </div>
                 {% empty %}
                     <p style="margin: 30px">Não há playlists disponíveis no momento!</p>
