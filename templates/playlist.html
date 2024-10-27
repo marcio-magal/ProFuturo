@@ -15,11 +15,16 @@
             allowfullscreen>
     </iframe>
 
+    <div>
+        <button id="like-button" data-video-id="{{ videos.0.id }}">Curtir</button>
+        <span id="like-count">{{ videos.0.likes }}</span> Curtidas
+    </div>
+
     <h3>Vídeos da Playlist</h3>
     <ul id="video-list">
         {% for video in videos %}
             <li>
-                <a href="#" class="video-link" data-video-id="{{ video.youtube_id }}">
+                <a href="#" class="video-link" data-video-id="{{ video.youtube_id }}" data-video-db-id="{{ video.id }}">
                     {{ video.title }}
                 </a>
             </li>
@@ -29,14 +34,75 @@
     </ul>
 
     <script>
+        // Função para atualizar o botão de curtir e o contador de curtidas
+        function updateLikeButton(videoDbId) {
+            fetch(`/playlist/like/${videoDbId}/status/`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const likeButton = document.getElementById('like-button');
+                const likeCount = document.getElementById('like-count');
+                
+                likeCount.textContent = data.likes;
+                likeButton.setAttribute('data-video-id', videoDbId);
+
+                if (data.liked) {
+                    likeButton.textContent = 'Descurtir';
+                } else {
+                    likeButton.textContent = 'Curtir';
+                }
+            });
+        }
+
         // Script para trocar o vídeo do iframe
         document.querySelectorAll('.video-link').forEach(link => {
             link.addEventListener('click', function(event) {
                 event.preventDefault();
                 const videoId = this.getAttribute('data-video-id');
+                const dbVideoId = this.getAttribute('data-video-db-id');
                 const iframe = document.getElementById('video-player');
+                
+                // Troca o vídeo no iframe
                 iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                
+                // Atualiza o botão de curtir para o novo vídeo
+                updateLikeButton(dbVideoId);
             });
+        });
+
+        // Script para curtir ou descurtir o vídeo
+        document.getElementById('like-button').addEventListener('click', function() {
+            const videoId = this.getAttribute('data-video-id');
+
+            fetch(`/playlist/like/${videoId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                const likeButton = document.getElementById('like-button');
+                const likeCount = document.getElementById('like-count');
+                
+                likeCount.textContent = data.likes;
+
+                if (data.liked) {
+                    likeButton.textContent = 'Descurtir';
+                } else {
+                    likeButton.textContent = 'Curtir';
+                }
+            });
+        });
+
+        // Atualiza o botão de curtir para o vídeo que é carregado inicialmente
+        document.addEventListener("DOMContentLoaded", function() {
+            updateLikeButton("{{ videos.0.id }}");
         });
     </script>
     

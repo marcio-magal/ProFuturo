@@ -1,20 +1,19 @@
-from django.db import models
-from urllib.parse import urlparse, parse_qs
 import requests
+from django.db import models
+from django.contrib.auth.models import User
 
 class Video(models.Model):
     title = models.CharField(max_length=300)
     url = models.URLField(max_length=300)
     description = models.TextField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
 
     def youtube_id(self):
-        """
-        Extraia o ID do vídeo do YouTube, suportando URLs padrão e encurtadas.
-        """
+        from urllib.parse import urlparse, parse_qs
         query = urlparse(self.url)
         if query.hostname == 'youtu.be':
             return query.path[1:]
@@ -28,21 +27,15 @@ class Video(models.Model):
         return None
 
     def youtube_thumbnail(self):
-        """
-        Obtenha a thumbnail do YouTube.
-        """
         video_id = self.youtube_id()
         if video_id:
             thumbnail_url = f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg"
             try:
-                # Verifica se é possível acessar a URL da thumbnail
                 response = requests.head(thumbnail_url, timeout=5)
                 if response.status_code == 200:
                     return thumbnail_url
             except requests.RequestException:
-                pass  # Se der erro, vai usar a imagem padrão
-
-        # Caminho para a imagem padrão
+                pass
         return "/static/img/default_video_thumbnail.jpg"
 
 
@@ -70,3 +63,12 @@ class PlaylistVideo(models.Model):
 
     def __str__(self):
         return f"{self.video.title} in {self.playlist.name}"
+
+
+class VideoLike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'video')
