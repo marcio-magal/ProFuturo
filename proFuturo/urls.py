@@ -1,20 +1,15 @@
 from django.conf import settings
 from django.contrib import admin
 from home.views import index, adm
-from playList.views import playList
 from cadastro.views import cadastro
 from django.urls import path, include
-
 from django.conf.urls.static import static
-
 from playList.views import playlist_detail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('adm/', adm),
-    path('playlist/', playList, name='playlist-list'),
-    path('playlist/<int:playlist_id>/', playList, name='playlist'),
-    path('playlist/<int:playlist_id>/', playlist_detail, name='playlist-detail'),  # Nova URL para cada playlist
+    path('playlist/<int:playlist_id>/', playlist_detail, name='playlist-detail'),
     path('', index, name='home'),
     path('cadastro/', cadastro, name='cadastro'),
     path('perfil/', include('perfil.urls')),
@@ -23,7 +18,5 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-if settings.DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
     urlpatterns += staticfiles_urlpatterns()
