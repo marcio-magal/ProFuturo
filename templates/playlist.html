@@ -20,6 +20,25 @@
         <span id="like-count">{{ videos.0.likes }}</span> Curtidas
     </div>
 
+    <div>
+        <h3>Comentários</h3>
+        <ul id="comment-list">
+            {% for comment in videos.0.comments.all %}
+                <li data-comment-id="{{ comment.id }}">
+                    <strong>{{ comment.user.username }}</strong>: <span class="comment-text">{{ comment.text }}</span>
+                    {% if comment.user == request.user %}
+                        <button class="edit-comment">Editar</button>
+                        <button class="delete-comment">Excluir</button>
+                    {% endif %}
+                </li>
+            {% empty %}
+                <p>Não há comentários ainda.</p>
+            {% endfor %}
+        </ul>
+        <textarea id="new-comment-text" placeholder="Adicionar um comentário..."></textarea>
+        <button id="add-comment-button">Comentar</button>
+    </div>
+
     <h3>Vídeos da Playlist</h3>
     <ul id="video-list">
         {% for video in videos %}
@@ -104,6 +123,90 @@
         document.addEventListener("DOMContentLoaded", function() {
             updateLikeButton("{{ videos.0.id }}");
         });
-    </script>
-    
+        
+        
+        // Função para adicionar um novo comentário
+        document.getElementById('add-comment-button').addEventListener('click', function() {
+            const videoId = document.getElementById('like-button').getAttribute('data-video-id');
+            const text = document.getElementById('new-comment-text').value;
+
+            fetch(`/playlist/comment/add/${videoId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `text=${encodeURIComponent(text)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    const commentList = document.getElementById('comment-list');
+                    const newComment = document.createElement('li');
+                    newComment.setAttribute('data-comment-id', data.id);
+                    newComment.innerHTML = `<strong>${data.user}</strong>: <span class="comment-text">${data.text}</span>`;
+                    if (data.user === "{{ request.user.username }}") {
+                        newComment.innerHTML += `
+                            <button class="edit-comment">Editar</button>
+                            <button class="delete-comment">Excluir</button>`;
+                    }
+                    commentList.appendChild(newComment);
+                    document.getElementById('new-comment-text').value = '';
+                }
+            });
+        });
+
+        // Função para editar um comentário
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('edit-comment')) {
+                const commentElement = event.target.closest('li');
+                const commentId = commentElement.getAttribute('data-comment-id');
+                const newText = prompt('Edite seu comentário:', commentElement.querySelector('.comment-text').textContent);
+
+                if (newText) {
+                    fetch(`/playlist/comment/edit/${commentId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `text=${encodeURIComponent(newText)}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            commentElement.querySelector('.comment-text').textContent = data.text;
+                        }
+                    });
+                }
+            }
+        });
+
+        // Função para excluir um comentário
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('delete-comment')) {
+                const commentElement = event.target.closest('li');
+                const commentId = commentElement.getAttribute('data-comment-id');
+
+                fetch(`/playlist/comment/delete/${commentId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        commentElement.remove();
+                    } else {
+                        alert('Erro ao excluir o comentário.');
+                    }
+                });
+            }
+        });
+    </script>    
 {% endblock %}
