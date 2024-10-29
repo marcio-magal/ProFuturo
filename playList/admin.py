@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Video, Playlist, PlaylistVideo
+from .models import Video, Playlist, PlaylistVideo, Comment
 
 @admin.register(Video)
 class VideoAdmin(admin.ModelAdmin):
@@ -17,3 +17,17 @@ class PlaylistAdmin(admin.ModelAdmin):
 class PlaylistVideoAdmin(admin.ModelAdmin):
     list_display = ('playlist', 'video', 'order')
     list_filter = ('playlist',)
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'video', 'text', 'created_at', 'updated_at')
+    search_fields = ('user__username', 'text')
+    list_filter = ('created_at', 'updated_at', 'video')
+
+    # Remove a opção de edição
+    def has_change_permission(self, request, obj=None):
+        return False  # Desabilita edição
+
+    # Permite apenas exclusão
+    def has_delete_permission(self, request, obj=None):
+        return True

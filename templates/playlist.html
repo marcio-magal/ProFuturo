@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block main %}
-    
-    <h1>Página da PlayList: {{ playlist.name }}</h1>
-    
+
+    <h1>{{ playlist.name }}</h1>
+
     <iframe id="video-player"
             width="560"
             height="315"
@@ -123,8 +123,8 @@
         document.addEventListener("DOMContentLoaded", function() {
             updateLikeButton("{{ videos.0.id }}");
         });
-        
-        
+
+
         // Função para adicionar um novo comentário
         document.getElementById('add-comment-button').addEventListener('click', function() {
             const videoId = document.getElementById('like-button').getAttribute('data-video-id');
@@ -208,5 +208,5 @@
                 });
             }
         });
-    </script>    
+    </script>
 {% endblock %}
