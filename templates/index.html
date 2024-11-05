@@ -126,7 +126,7 @@
 
 {% block main %}
     {% if videos.number == 1 %}
-        <h3 align="center" style="padding: 20px">Olá, {{ request.user.username }}! Bem vindo a ProFuturo</h3>
+        <h3 align="center" style="padding: 20px">Olá, {{ request.user.username }}! Bem vindo à ProFuturo</h3>
     {% endif %}
     <br>
 
@@ -180,12 +180,12 @@
             {% endif %}
         </span>
     </div>
-    
+
     <script>
         document.querySelector('.prev-btn').addEventListener('click', () => {
             document.querySelector('.playlist-carousel').scrollBy({ left: -300, behavior: 'smooth' });
         });
-    
+
         document.querySelector('.next-btn').addEventListener('click', () => {
             document.querySelector('.playlist-carousel').scrollBy({ left: 300, behavior: 'smooth' });
         });

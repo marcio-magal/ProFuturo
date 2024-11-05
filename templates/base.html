@@ -90,6 +90,67 @@
       .bd-mode-toggle .dropdown-menu .active .bi {
         display: block !important;
       }
+
+      /* Estilos do Modal (janela) */
+        .modal {
+            display: none; /* Oculto por padrão */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        /* Botão de fechar */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Campos de formulário */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #formCadastro input[type="text"],
+        #formCadastro input[type="url"],
+        #formCadastro textarea {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        #formCadastro button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
   
     {% block style %}{% endblock %}
@@ -158,9 +219,9 @@
       <symbol id="home" viewBox="0 0 16 16">
         <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
       </symbol>
-      <symbol id="speedometer2" viewBox="0 0 16 16">
-        <path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4zM3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.389.389 0 0 0-.029-.518z"/>
-        <path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10zm8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3z"/>
+      <symbol id="File earmark play" viewBox="0 0 16 16">
+        <path d="M6 6.883v4.234a.5.5 0 0 0 .757.429l3.528-2.117a.5.5 0 0 0 0-.858L6.757 6.454a.5.5 0 0 0-.757.43z"/>
+        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
       </symbol>
       <symbol id="table" viewBox="0 0 16 16">
         <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/>
@@ -175,7 +236,7 @@
     </svg>
 
     <main class="d-flex flex-nowrap">
-      <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary" style="width: 4.5rem;">
+      <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary" style="width: 4.5rem; border-top: 3px solid #01205F;">
         <a href="/" class="d-block p-3 link-body-emphasis text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="right">
             <img class="bi pe-none" width="41" src="{% static 'img/favicon.svg' %}">
         </a>
@@ -185,22 +246,23 @@
               <svg class="bi" width="24" height="24" role="img" aria-label="Home"><use href="#home"/></svg>
             </a>
           </li>
-          <li>
-            <a href="#" class="nav-link py-3 border-bottom rounded-0" title="Só de enfeite!" data-bs-toggle="tooltip" data-bs-placement="right">
-              <svg class="bi" width="24" height="24" role="img" aria-label="Dashboard"><use href="#speedometer2"/></svg>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav-link py-3 border-bottom rounded-0" title="Só de enfeite!" data-bs-toggle="tooltip" data-bs-placement="right">
-              <svg class="bi" width="24" height="24" role="img" aria-label="Orders"><use href="#table"/></svg>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav-link py-3 border-bottom rounded-0" title="Só de enfeite!" data-bs-toggle="tooltip" data-bs-placement="right">
-              <svg class="bi" width="24" height="24" role="img" aria-label="Products"><use href="#grid"/></svg>
-            </a>
-          </li>
-          {% if request.user.is_superuser %}
+
+{#          <li>#}
+{#            <a href="#" class="nav-link py-3 border-bottom rounded-0" title="Só de enfeite!" data-bs-toggle="tooltip" data-bs-placement="right">#}
+{#              <svg class="bi" width="24" height="24" role="img" aria-label="Orders"><use href="#table"/></svg>#}
+{#            </a>#}
+{#          </li>#}
+{#          <li>#}
+{#            <a href="#" class="nav-link py-3 border-bottom rounded-0" title="Só de enfeite!" data-bs-toggle="tooltip" data-bs-placement="right">#}
+{#              <svg class="bi" width="24" height="24" role="img" aria-label="Products"><use href="#grid"/></svg>#}
+{#            </a>#}
+{#          </li>#}
+            <li>
+              <a href="javascript:void(0)" class="nav-link py-3 border-bottom rounded-0" title="Sugerir um vídeo" data-bs-toggle="tooltip" data-bs-placement="right" onclick="abrirModal()">
+                <svg class="bi" width="24" height="24" role="img" aria-label="Sugerir vídeo"><use href="#File earmark play"/></svg>
+              </a>
+            </li>
+            {% if request.user.is_superuser %}
             <li>
                 <a href="/adm" class="nav-link py-3 border-bottom rounded-0" title="ADM" data-bs-toggle="tooltip" data-bs-placement="right">
                     <img class="bi" src="{% static 'img/admin.png' %}" alt="Imagem de Perfil" width="30">
@@ -229,7 +291,7 @@
         </div>
       </div>
     
-      <div class="b-example-divider b-example-vr"></div>
+      <div class="b-example-divider b-example-vr" style="border-top: 3px solid #01205F;"></div>
     
       <div class="content"> <!--Necessário para posicionar os conteúdos livremente-->
         <div class="main"> <!--Necessário para manter o footer no final da página-->
@@ -241,6 +303,82 @@
         {% block adm %}{% endblock %}
       </div>
     </main>
+
+      <!--Modal Cadastro-->
+      <div class="container">
+          <!-- Modal (janela) do formulário de cadastro de vídeo -->
+          <div id="modalCadastro" class="modal">
+              <div class="modal-content">
+                  <span style="text-align: end" class="close" onclick="fecharModal()">&times;</span>
+                  <h2>Sugira um novo vídeo</h2><br>
+                  <form id="formCadastro">
+                      <label for="nome">Nome do Vídeo:</label>
+                      <input type="text" id="nome" name="nome" required>
+
+                      <label for="link">Link do Vídeo:</label>
+                      <input type="url" id="link" name="link" required>
+
+                      <label for="descricao">Descrição do Vídeo:</label>
+                      <textarea id="descricao" name="descricao" required></textarea>
+
+                      <button type="submit">Enviar para análize</button>
+                  </form>
+              </div>
+          </div>
+      </div> <!--Fim Modal Cadastro-->
+
+    <script>
+        // Função para abrir o modal
+        function abrirModal() {
+            document.getElementById('modalCadastro').style.display = 'block';
+        }
+
+        // Função para fechar o modal
+        function fecharModal() {
+            document.getElementById('modalCadastro').style.display = 'none';
+        }
+
+        // Fecha o modal ao clicar fora do conteúdo
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalCadastro');
+            if (event.target === modal) {
+                fecharModal();
+            }
+        };
+
+        document.getElementById("formCadastro").onsubmit = function(event) {
+            event.preventDefault(); // Evita o envio real do formulário
+
+            const nome = document.getElementById("nome").value;
+            const link = document.getElementById("link").value;
+            const descricao = document.getElementById("descricao").value;
+
+            // Enviar a requisição AJAX
+            fetch('/video/cadastrar/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'  // Adicione o CSRF token para segurança
+                },
+                body: `nome=${encodeURIComponent(nome)}&link=${encodeURIComponent(link)}&descricao=${encodeURIComponent(descricao)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert(data.message);
+                    fecharModal(); // Fechar o modal após o cadastro
+
+                    document.getElementById("formCadastro").reset(); // Limpar o formulário
+                }
+            })
+            .catch(error => {
+                alert("Ocorreu um erro ao cadastrar o vídeo.");
+                console.error("Erro:", error);
+            });
+        };
+    </script>
     
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/sidebars.js' %}"></script>

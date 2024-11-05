@@ -8,7 +8,7 @@ from .models import Video, VideoLike, Comment
 @login_required
 def playlist_detail(request, playlist_id):
     playlist = get_object_or_404(Playlist, id=playlist_id)
-    videos = playlist.videos.all()
+    videos = playlist.videos.filter(visibilidade=True)  # Filtra apenas vídeos visíveis
     return render(request, 'playlist.html', {'playlist': playlist, 'videos': videos})
 
 

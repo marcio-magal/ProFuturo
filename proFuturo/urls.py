@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
-from home.views import index, adm
+from home.views import index, adm, cadastrar_video
 from cadastro.views import cadastro
 from django.urls import path, include
 from django.conf.urls.static import static
@@ -15,6 +15,7 @@ urlpatterns = [
     path('playlist/comment/add/<int:video_id>/', add_comment, name='add-comment'),
     path('playlist/comment/edit/<int:comment_id>/', edit_comment, name='edit-comment'),
     path('playlist/comment/delete/<int:comment_id>/', delete_comment, name='delete-comment'),
+    path('video/cadastrar/', cadastrar_video, name='cadastrar-video'),
     path('', index, name='home'),
     path('cadastro/', cadastro, name='cadastro'),
     path('perfil/', include('perfil.urls')),
