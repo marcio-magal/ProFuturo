@@ -1,0 +1,118 @@
+.playlist-carousel-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.playlist-carousel {
+  display: flex;
+  overflow-x: scroll; /* Permite rolagem horizontal */
+  scroll-behavior: smooth;
+  gap: 20px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-bottom: 25px;
+
+  /* Oculta a barra de rolagem */
+  -ms-overflow-style: none;  /* Para Internet Explorer e Edge */
+  scrollbar-width: none;     /* Para Firefox */
+}
+
+.playlist-carousel::-webkit-scrollbar {
+  display: none;  /* Para Chrome, Safari e Opera */
+}
+
+.playlist-item {
+  min-width: 28%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative; /* Para conter o link */
+}
+
+.playlist-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  height: 100%;
+  width: 100%;
+}
+
+.playlist-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.playlist-thumbnail {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.playlist-item h3 {
+  font-size: 1em;
+  margin: 10px 0;
+  color: #000;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 2em;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.prev-btn {
+  left: 0;
+}
+
+.next-btn {
+  right: 0;
+}
+
+/* Video Grid Styles */
+.video-grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: flex-start;
+  padding-left: 10px;
+}
+
+.video-grid-item {
+  width: calc((100% - 80px) / 4);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.video-grid-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.video-grid-thumbnail {
+  width: 100%;
+  height: 164px;
+  object-fit: cover;
+  border-bottom: 1px solid #ccc;
+}
+
+.video-grid-item h3 {
+  font-size: 1em;
+  margin: 10px 0;
+  color: #000;
+}

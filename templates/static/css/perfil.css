@@ -1,0 +1,14 @@
+.perfil-container {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente, caso necessário */
+    flex-direction: column; /* Coloca o conteúdo em coluna (imagem + texto) */
+    }
+
+    .perfil-imagem {
+    width: 150px; /* Ajuste o tamanho da imagem */
+    height: 150px;
+    border-radius: 50%; /* Torna a imagem circular */
+    object-fit: cover; /* Corta a imagem para preencher o espaço */
+    object-position: top; /* Mostra a parte superior da imagem */
+    }

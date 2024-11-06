@@ -1,0 +1,21 @@
+.perfil-imagem {
+    width: 230px; /* Ajuste o tamanho da imagem */
+    height: 230px;
+    border-radius: 50%; /* Torna a imagem circular */
+    object-fit: cover; /* Corta a imagem para preencher o espaço */
+    object-position: top; /* Mostra a parte superior da imagem */
+    position: relative; /* Necessário para o ícone */
+}
+
+.icon-pencil {
+    position: absolute;
+    background-color: #1D1F23;
+    color: #fff;
+    border-radius: 30%;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    /* Posicionamento na área de 5 horas (parte interna) */
+    bottom: 13.6%;  /* Ajuste para descer um pouco */
+    right: 20%;   /* Ajuste para ficar mais à direita */
+}
