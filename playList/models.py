@@ -46,6 +46,11 @@ class Playlist(models.Model):
     videos = models.ManyToManyField(Video, through='PlaylistVideo', related_name='playlists')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def get_videos(self):
+        if self.name == "Todos os vídeos":
+            return Video.objects.all()
+        return self.videos.all()
+
     def __str__(self):
         return self.name
 
@@ -84,3 +89,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.user.username}: {self.text[:30]}"
+
+    class Meta:
+        verbose_name_plural = "Comentários"

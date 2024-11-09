@@ -4,7 +4,13 @@ from home.views import index, adm, cadastrar_video
 from cadastro.views import cadastro
 from django.urls import path, include
 from django.conf.urls.static import static
-from playList.views import playlist_detail, like_video, video_like_status, add_comment, edit_comment, delete_comment
+from playList.views import (playlist_detail,
+                            like_video,
+                            video_like_status,
+                            add_comment,
+                            edit_comment,
+                            delete_comment,
+                            video_data)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,6 +22,7 @@ urlpatterns = [
     path('playlist/comment/edit/<int:comment_id>/', edit_comment, name='edit-comment'),
     path('playlist/comment/delete/<int:comment_id>/', delete_comment, name='delete-comment'),
     path('video/cadastrar/', cadastrar_video, name='cadastrar-video'),
+    path('video-data/<int:video_id>/', video_data, name='video-data'),
     path('', index, name='home'),
     path('cadastro/', cadastro, name='cadastro'),
     path('perfil/', include('perfil.urls')),

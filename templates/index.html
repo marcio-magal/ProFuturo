@@ -31,8 +31,10 @@
     <div class="video-grid-container" id="video-container">
         {% for video in videos %}
             <div class="video-grid-item">
-                <img src="{{ video.youtube_thumbnail }}" alt="{{ video.title }}" class="video-grid-thumbnail">
-                <h3>{{ video.title }}</h3>
+                <a href="{% url 'playlist-detail' all_videos_playlist.id %}?video_id={{ video.id }}" class="playlist-link">
+                    <img src="{{ video.youtube_thumbnail }}" alt="{{ video.title }}" class="video-grid-thumbnail">
+                    <h3>{{ video.title }}</h3>
+                </a>
             </div>
         {% empty %}
             <p style="margin: 30px">Não há vídeos disponíveis no momento!</p>

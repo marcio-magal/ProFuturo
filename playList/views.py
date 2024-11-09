@@ -1,15 +1,50 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
-from playList.models import Playlist
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from .models import Video, VideoLike, Comment
+from .models import Playlist, Video, VideoLike, Comment
 
 @login_required
 def playlist_detail(request, playlist_id):
     playlist = get_object_or_404(Playlist, id=playlist_id)
-    videos = playlist.videos.filter(visibilidade=True)  # Filtra apenas vídeos visíveis
-    return render(request, 'playlist.html', {'playlist': playlist, 'videos': videos})
+    video_id = request.GET.get('video_id')  # Obtém o ID do vídeo a partir da URL
+
+    # Verifica se a playlist é "Todos os vídeos"
+    if playlist.name == "Todos os vídeos":
+        # Obtém todos os vídeos visíveis
+        videos = Video.objects.filter(visibilidade=True)
+    else:
+        # Obtém apenas os vídeos visíveis relacionados a esta playlist
+        videos = playlist.videos.filter(visibilidade=True)
+
+    # Define o vídeo selecionado:
+    # Se `video_id` for fornecido, busca o vídeo específico
+    # Caso contrário, usa o primeiro vídeo da lista `videos`
+    selected_video = get_object_or_404(Video, id=video_id, visibilidade=True) if video_id else videos.first()
+
+    return render(request, 'playlist.html', {
+        'playlist': playlist,
+        'videos': videos,
+        'selected_video': selected_video
+    })
+
+
+@login_required
+def video_data(request, video_id):
+    video = get_object_or_404(Video, id=video_id)
+    data = {
+        'likes': video.likes,
+        'comments': [
+            {
+                'user': comment.user.username,
+                'text': comment.text,
+                'comment_id': comment.id,
+                'is_owner': comment.user == request.user  # Verifica se o comentário pertence ao usuário logado
+            }
+            for comment in video.comments.all()
+        ]
+    }
+    return JsonResponse(data)
 
 
 @login_required

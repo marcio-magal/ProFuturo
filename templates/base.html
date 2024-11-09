@@ -221,6 +221,53 @@
     </script><!-- Fim Modal -->
     
     <script> //Playlist
+        //Iframe
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoPlayer = document.getElementById('video-player');
+            const likeButton = document.getElementById('like-button');
+            const likeCount = document.getElementById('like-count');
+            const commentList = document.getElementById('comment-list');
+    
+            document.querySelectorAll('.video-link').forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+    
+                    const youtubeId = link.getAttribute('data-video-id');
+                    const videoDbId = link.getAttribute('data-video-db-id');
+    
+                    videoPlayer.src = `https://www.youtube.com/embed/${youtubeId}`;
+                    likeButton.setAttribute('data-video-id', videoDbId);
+    
+                    fetch(`/video-data/${videoDbId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            likeCount.textContent = data.likes;
+    
+                            commentList.innerHTML = '';
+                            if (data.comments.length > 0) {
+                                data.comments.forEach(comment => {
+                                    const commentItem = document.createElement('li');
+                                    commentItem.setAttribute('data-comment-id', comment.comment_id);
+                                    commentItem.innerHTML = `
+                                        <strong>${comment.user}</strong>: <span class="comment-text">${comment.text}</span>
+                                    `;
+                                    if (comment.is_owner) {
+                                        commentItem.innerHTML += `
+                                            <button class="edit-comment">Editar</button>
+                                            <button class="delete-comment">Excluir</button>
+                                        `;
+                                    }
+                                    commentList.appendChild(commentItem);
+                                });
+                            } else {
+                                commentList.innerHTML = '<p>Não há comentários ainda.</p>';
+                            }
+                        })
+                        .catch(error => console.error('Erro ao carregar dados do vídeo:', error));
+                });
+            });
+        });//Fim Iframe
+    
         // Função para atualizar o botão de curtir e o contador de curtidas
         function updateLikeButton(videoDbId) {
             fetch(`/playlist/like/${videoDbId}/status/`, {
@@ -244,22 +291,6 @@
                 }
             });
         }
-
-        // Script para trocar o vídeo do iframe
-        document.querySelectorAll('.video-link').forEach(link => {
-            link.addEventListener('click', function(event) {
-                event.preventDefault();
-                const videoId = this.getAttribute('data-video-id');
-                const dbVideoId = this.getAttribute('data-video-db-id');
-                const iframe = document.getElementById('video-player');
-
-                // Troca o vídeo no iframe
-                iframe.src = `https://www.youtube.com/embed/${videoId}`;
-
-                // Atualiza o botão de curtir para o novo vídeo
-                updateLikeButton(dbVideoId);
-            });
-        });
 
         // Script para curtir ou descurtir o vídeo
         document.getElementById('like-button').addEventListener('click', function() {
