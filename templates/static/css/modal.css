@@ -16,6 +16,7 @@
     border-radius: 10px;
     width: 50%;
     max-width: 500px;
+    position: relative; /* Necessário para o posicionamento absoluto funcionar */
     text-align: left;
 }
 
@@ -24,6 +25,9 @@
     color: #aaa;
     font-size: 28px;
     font-weight: bold;
+    position: absolute; /* Torna o botão independente do fluxo de layout */
+    top: 10px; /* Ajusta a posição para o canto superior */
+    right: 20px; /* Ajusta a posição para o canto direito */
 }
 
 .close:hover, .close:focus {
