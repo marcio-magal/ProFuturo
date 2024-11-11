@@ -5,9 +5,6 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.122.0">
     <title>ProFuturo</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
@@ -86,6 +83,26 @@
         <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
       </symbol>
     </svg>
+    
+    <!-- Modal (janela) do formulário de cadastro de vídeo -->
+    <div id="modalCadastro" class="modal">
+      <div class="modal-content">
+          <span class="close" style="text-align: end" onclick="fecharModal()">&times;</span>
+          <h2>Sugira um novo vídeo...</h2><br>
+          <form id="formCadastro">
+              <label for="nome">Nome do Vídeo:</label>
+              <input type="text" id="nome" name="nome" required>
+    
+              <label for="link">Link do Vídeo:</label>
+              <input type="url" id="link" name="link" required>
+    
+              <label for="descricao">Descrição do Vídeo:</label>
+              <textarea id="descricao" name="descricao" required></textarea>
+              <br>
+              <button type="submit">Enviar para análize</button>
+          </form>
+      </div>
+    </div><!--Fim Modal Cadastro-->
 
     <main class="d-flex flex-nowrap">
       <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary" style="width: 4.5rem; border-top: 3px solid #01205F;">
@@ -132,41 +149,25 @@
         </div>
       </div>
     
+    
       <div class="b-example-divider b-example-vr" style="border-top: 3px solid #01205F;"></div>
     
       <div class="content"> <!--Necessário para posicionar os conteúdos livremente-->
         <div class="main"> <!--Necessário para manter o footer no final da página-->
+        
             {% block main %}{% endblock %}
+        
         </div>
       
         {% block adm %}{% endblock %}
       
         {% block footer %}{% endblock %}
+      
       </div>
+    
+        {% block sidebar2 %}{% endblock %}
     </main>
-
-      <!--Modal Cadastro-->
-      <div class="container">
-          <!-- Modal (janela) do formulário de cadastro de vídeo -->
-          <div id="modalCadastro" class="modal">
-              <div class="modal-content">
-                  <span style="text-align: end" class="close" onclick="fecharModal()">&times;</span>
-                  <h2>Sugira um novo vídeo...</h2><br>
-                  <form id="formCadastro">
-                      <label for="nome">Nome do Vídeo:</label>
-                      <input type="text" id="nome" name="nome" required>
-
-                      <label for="link">Link do Vídeo:</label>
-                      <input type="url" id="link" name="link" required>
-
-                      <label for="descricao">Descrição do Vídeo:</label>
-                      <textarea id="descricao" name="descricao" required></textarea>
-
-                      <button type="submit">Enviar para análize</button>
-                  </form>
-              </div>
-          </div>
-      </div><!--Fim Modal Cadastro-->
+    
     
     <script> //Modal
         function abrirModal() {
@@ -219,6 +220,7 @@
             });
         };
     </script><!-- Fim Modal -->
+    
     
     <script> //Playlist
         //Iframe

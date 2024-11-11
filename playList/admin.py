@@ -44,3 +44,7 @@ class CommentAdmin(admin.ModelAdmin):
     # Permite apenas exclusão
     def has_delete_permission(self, request, obj=None):
         return True
+
+    # Remove a opção de adicionar
+    def has_add_permission(self, request):
+        return False  # Desabilita adição
