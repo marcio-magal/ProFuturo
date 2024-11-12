@@ -11,6 +11,10 @@
 
       .main.no-scroll { /*Classe condicional para playlist*/
         overflow-y: scroll; /* Ativa a rolagem vertical */
+
+        /* Oculta a barra de rolagem */
+        -ms-overflow-style: none;  /* Para Internet Explorer e Edge */
+        scrollbar-width: none;     /* Para Firefox */
       }
 
       .main.no-scroll::-webkit-scrollbar {
