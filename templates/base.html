@@ -153,7 +153,7 @@
       <div class="b-example-divider b-example-vr" style="border-top: 3px solid #01205F;"></div>
     
       <div class="content"> <!--Necessário para posicionar os conteúdos livremente-->
-        <div class="main"> <!--Necessário para manter o footer no final da página-->
+        <div class="main {% block page_class %}{% endblock %}"> <!--Necessário para manter o footer no final da página-->
         
             {% block main %}{% endblock %}
         
