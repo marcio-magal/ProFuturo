@@ -19,37 +19,46 @@
     </div>
 
     <!-- Like Button -->
-    <div>
-        <button id="like-button" data-video-id="{{ selected_video.id }}">Curtir</button>
-        <span id="like-count">{{ selected_video.likes }}</span> Curtidas
-    </div>
-
+    <div class="d-flex align-items-center mb-3" style="margin: 0 18px">
+        <button id="like-button" data-video-id="{{ selected_video.id }}" class="btn btn-primary me-2">Curtir</button>
+        <span id="like-count" class="me-1">{{ selected_video.likes }}</span> Curtidas
+    </div><br>
+    
     <!-- Comments Section -->
-    <div>
-        <h3>Comentários</h3>
-        <ul id="comment-list">
+    <div class="comments-section mb-4" style="margin: 0 18px">
+        <h3 class="mb-3">Comentários</h3>
+        <ul id="comment-list" class="list-group mb-3">
             {% for comment in selected_video.comments.all %}
-                <li data-comment-id="{{ comment.id }}">
-                    <strong>{{ comment.user.username }}</strong>: <span class="comment-text">{{ comment.text }}</span>
+                <li class="list-group-item d-flex justify-content-between align-items-center" data-comment-id="{{ comment.id }}">
+                    <div>
+                        <strong>{{ comment.user.username }}</strong>: <span class="comment-text">{{ comment.text }}</span>
+                    </div>
                     {% if comment.user == request.user %}
-                        <button class="edit-comment">Editar</button>
-                        <button class="delete-comment">Excluir</button>
+                        <div class="btn-group btn-group-sm">
+                            <button class="edit-comment btn btn-outline-secondary">Editar</button>
+                            <button class="delete-comment btn btn-outline-danger">Excluir</button>
+                        </div>
                     {% endif %}
                 </li>
             {% empty %}
-                <p>Não há comentários ainda.</p>
+                <p class="text-muted">Não há comentários ainda.</p>
             {% endfor %}
         </ul>
-        <textarea id="new-comment-text" placeholder="Adicionar um comentário..."></textarea>
-        <button id="add-comment-button">Comentar</button>
-    </div>
+        <textarea id="new-comment-text" class="form-control mb-2" placeholder="Adicionar um comentário..."></textarea>
+        <button id="add-comment-button" class="btn btn-success">Comentar</button>
+    </div><br>
+    
+    <footer style="padding-top: 20px; text-align: center">
+        <p>&copy; UFRA LC - 2024</p>
+    </footer>
 {% endblock %}
+
 
 {% block sidebar2 %}
     <div class="b-example-divider b-example-vr" style="border-top: 3px solid #01205F;"></div>
     
     <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary" style="width: 280px; border-top: 3px solid #01205F;">
-        <div class="d-flex align-items-center p-2 border-bottom">
+        <div class="d-flex align-items-center p-1 border-bottom">
           <span class="fs-5 fw-semibold">{{ playlist.name }}</span>
         </div>
         <div class="list-group list-group-flush border-bottom scrollarea">
