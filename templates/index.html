@@ -2,12 +2,12 @@
 
 {% block main %}
     {% if videos.number == 1 %}
-        <h3 align="center" style="padding: 20px">Olá, {{ request.user.username }}! Bem vindo à ProFuturo</h3>
+        <h3 class="text-center my-3 fw-semibold">Olá, {{ request.user.username }}! Bem-vindo à ProFuturo</h3>
     {% endif %}
     <br>
 
     {% if videos.number == 1 %}
-        <h5 style="padding-left: 10px">Playlists</h5>
+        <h5 class="ps-3 fw-bold">Playlists</h5>
         <div class="playlist-carousel-container">
             <button class="carousel-btn prev-btn">&#10094;</button>
             <div class="playlist-carousel">
@@ -27,7 +27,7 @@
     {% endif %}
         
     <br>
-    <h5 style="padding-left: 10px">Todos os vídeos</h5>
+    <h5 class="ps-3 fw-bold">Todos os vídeos</h5>
     <div class="video-grid-container" id="video-container">
         {% for video in videos %}
             <div class="video-grid-item">
@@ -41,22 +41,30 @@
         {% endfor %}
     </div>
     
-    <div class="pagination" style="padding: 12px">
-        <span class="step-links">
+    <div class="pagination d-flex justify-content-center" style="padding: 12px;">
+        <ul class="pagination">
             {% if videos.has_previous %}
-                <a href="?page=1">&laquo; primeira</a>
-                <a href="?page={{ videos.previous_page_number }}">anterior</a>
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="Primeira">&laquo; primeira</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ videos.previous_page_number }}" aria-label="Anterior">anterior</a>
+                </li>
             {% endif %}
     
-            <span class="current">
-                Página {{ videos.number }} de {{ videos.paginator.num_pages }}.
-            </span>
+            <li class="page-item disabled">
+                <span class="page-link">Página {{ videos.number }} de {{ videos.paginator.num_pages }}.</span>
+            </li>
     
             {% if videos.has_next %}
-                <a href="?page={{ videos.next_page_number }}">próxima</a>
-                <a href="?page={{ videos.paginator.num_pages }}">última &raquo;</a>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ videos.next_page_number }}" aria-label="Próxima">próxima</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ videos.paginator.num_pages }}" aria-label="Última">última &raquo;</a>
+                </li>
             {% endif %}
-        </span>
+        </ul>
     </div>
 
     <script>
@@ -71,7 +79,7 @@
 {% endblock %}
 
 {% block footer %}
-    <footer style="padding-top: 20px; text-align: center">
-        <p>&copy; UFRA LC - 2024</p>
+    <footer class="text-center border-top" style="padding-top: 18px;">
+        <p class="text-muted">&copy; UFRA LC - 2024</p>
     </footer>
 {% endblock %}

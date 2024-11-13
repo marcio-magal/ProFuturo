@@ -179,14 +179,6 @@
             document.getElementById('modalCadastro').style.display = 'none';
         }
         
-        // Fecha o modal ao clicar fora do conteúdo
-        window.onclick = function(event) {
-            const modal = document.getElementById('modalCadastro');
-            if (event.target === modal) {
-                fecharModal();
-            }
-        };
-        
         document.getElementById("formCadastro").onsubmit = function(event) {
             event.preventDefault(); // Evita o envio real do formulário
         
@@ -223,52 +215,60 @@
     
     
     <script> //Playlist
-        //Iframe
+        // Iframe
         document.addEventListener('DOMContentLoaded', function() {
             const videoPlayer = document.getElementById('video-player');
             const likeButton = document.getElementById('like-button');
             const likeCount = document.getElementById('like-count');
             const commentList = document.getElementById('comment-list');
-    
+        
             document.querySelectorAll('.video-link').forEach(link => {
                 link.addEventListener('click', function(event) {
                     event.preventDefault();
-    
+        
                     const youtubeId = link.getAttribute('data-video-id');
                     const videoDbId = link.getAttribute('data-video-db-id');
-    
+        
                     videoPlayer.src = `https://www.youtube.com/embed/${youtubeId}`;
                     likeButton.setAttribute('data-video-id', videoDbId);
-    
+        
                     fetch(`/video-data/${videoDbId}/`)
                         .then(response => response.json())
                         .then(data => {
                             likeCount.textContent = data.likes;
-    
+        
                             commentList.innerHTML = '';
                             if (data.comments.length > 0) {
                                 data.comments.forEach(comment => {
                                     const commentItem = document.createElement('li');
+        
+                                    // Adiciona classes Bootstrap para formatação correta
+                                    commentItem.className = 'list-group-item d-flex justify-content-between align-items-center';
                                     commentItem.setAttribute('data-comment-id', comment.comment_id);
+        
+                                    // Conteúdo do comentário com formatação
                                     commentItem.innerHTML = `
-                                        <strong>${comment.user}</strong>: <span class="comment-text">${comment.text}</span>
+                                        <div>
+                                            <strong>${comment.user}</strong>: <span class="comment-text">${comment.text}</span>
+                                        </div>
+                                        ${comment.is_owner ? `
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="edit-comment btn btn-outline-secondary">Editar</button>
+                                                <button class="delete-comment btn btn-outline-danger">Excluir</button>
+                                            </div>
+                                        ` : ''}
                                     `;
-                                    if (comment.is_owner) {
-                                        commentItem.innerHTML += `
-                                            <button class="edit-comment">Editar</button>
-                                            <button class="delete-comment">Excluir</button>
-                                        `;
-                                    }
+        
                                     commentList.appendChild(commentItem);
                                 });
                             } else {
-                                commentList.innerHTML = '<p>Não há comentários ainda.</p>';
+                                commentList.innerHTML = '<p class="text-muted">Não há comentários ainda.</p>';
                             }
                         })
                         .catch(error => console.error('Erro ao carregar dados do vídeo:', error));
                 });
             });
-        });//Fim Iframe
+        });
     
         // Função para atualizar o botão de curtir e o contador de curtidas
         function updateLikeButton(videoDbId) {
@@ -330,7 +330,7 @@
         document.getElementById('add-comment-button').addEventListener('click', function() {
             const videoId = document.getElementById('like-button').getAttribute('data-video-id');
             const text = document.getElementById('new-comment-text').value;
-
+        
             fetch(`/playlist/comment/add/${videoId}/`, {
                 method: 'POST',
                 headers: {
@@ -346,26 +346,38 @@
                 } else {
                     const commentList = document.getElementById('comment-list');
                     const newComment = document.createElement('li');
+        
+                    // Adiciona as classes Bootstrap ao novo comentário
+                    newComment.className = 'list-group-item d-flex justify-content-between align-items-center';
                     newComment.setAttribute('data-comment-id', data.id);
-                    newComment.innerHTML = `<strong>${data.user}</strong>: <span class="comment-text">${data.text}</span>`;
-                    if (data.user === "{{ request.user.username }}") {
-                        newComment.innerHTML += `
-                            <button class="edit-comment">Editar</button>
-                            <button class="delete-comment">Excluir</button>`;
-                    }
+        
+                    // Conteúdo do comentário com classes Bootstrap para o botão
+                    newComment.innerHTML = `
+                        <div>
+                            <strong>${data.user}</strong>: <span class="comment-text">${data.text}</span>
+                        </div>
+                        ${data.user === "{{ request.user.username }}" ? `
+                            <div class="btn-group btn-group-sm">
+                                <button class="edit-comment btn btn-outline-secondary">Editar</button>
+                                <button class="delete-comment btn btn-outline-danger">Excluir</button>
+                            </div>
+                        ` : ''}
+                    `;
+        
+                    // Adiciona o novo comentário à lista e limpa o campo de texto
                     commentList.appendChild(newComment);
                     document.getElementById('new-comment-text').value = '';
                 }
             });
         });
-
+        
         // Função para editar um comentário
         document.addEventListener('click', function(event) {
             if (event.target.classList.contains('edit-comment')) {
                 const commentElement = event.target.closest('li');
                 const commentId = commentElement.getAttribute('data-comment-id');
                 const newText = prompt('Edite seu comentário:', commentElement.querySelector('.comment-text').textContent);
-
+        
                 if (newText) {
                     fetch(`/playlist/comment/edit/${commentId}/`, {
                         method: 'POST',
@@ -386,13 +398,13 @@
                 }
             }
         });
-
+        
         // Função para excluir um comentário
         document.addEventListener('click', function(event) {
             if (event.target.classList.contains('delete-comment')) {
                 const commentElement = event.target.closest('li');
                 const commentId = commentElement.getAttribute('data-comment-id');
-
+        
                 fetch(`/playlist/comment/delete/${commentId}/`, {
                     method: 'POST',
                     headers: {
