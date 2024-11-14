@@ -9,18 +9,6 @@
         flex: 1;
       }
 
-      .main.no-scroll { /*Classe condicional para playlist*/
-        overflow-y: scroll; /* Ativa a rolagem vertical */
-
-        /* Oculta a barra de rolagem */
-        -ms-overflow-style: none;  /* Para Internet Explorer e Edge */
-        scrollbar-width: none;     /* Para Firefox */
-      }
-
-      .main.no-scroll::-webkit-scrollbar {
-        width: 0; /* Oculta a barra de rolagem apenas no Chrome */
-      }
-
       @media (min-width: 768px) {
       }
 
