@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
 
 {% block main %}
-    {% if videos.number == 1 %}
-        <h3 class="text-center my-3 fw-semibold">Olá, {{ request.user.username }}! Bem-vindo à ProFuturo</h3>
+    {% if request.user.is_authenticated %}
+      <h3 class="text-center my-3 fw-semibold">
+        Olá, {{ request.user.username }}! Bem-vindo à ProFuturo
+      </h3>
+    {% else %}
+      <h3 class="text-center my-3 fw-semibold">
+        Olá! Bem-vindo à ProFuturo
+      </h3>
     {% endif %}
+
     <br>
 
     {% if videos.number == 1 %}

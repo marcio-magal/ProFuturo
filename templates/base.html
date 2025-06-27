@@ -120,13 +120,13 @@
                 <svg class="bi" width="24" height="24" role="img" aria-label="Sugerir vídeo"><use href="#play-btn"/></svg>
               </a>
             </li>
-            {% if request.user.is_superuser %}
-                <li>
-                    <a href="/adm" class="nav-link py-3 border-bottom rounded-0" title="ADM" data-bs-toggle="tooltip" data-bs-placement="right">
-                        <img class="bi" src="{% static 'img/admin.png' %}" alt="Imagem de Perfil" width="30">
-                    </a>
-                </li>
-            {% endif %}
+
+            <li>
+                <a href="/adm" class="nav-link py-3 border-bottom rounded-0" title="ADM" data-bs-toggle="tooltip" data-bs-placement="right">
+                    <img class="bi" src="{% static 'img/admin.png' %}" alt="Imagem de Perfil" width="30">
+                </a>
+            </li>
+
         </ul>
         <div class="dropdown border-top">
           <a href="#" class="d-flex align-items-center justify-content-center p-3 link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

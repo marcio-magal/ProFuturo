@@ -4,7 +4,6 @@ from django.shortcuts import render, get_object_or_404
 from playList.models import Playlist, Video
 from django.http import JsonResponse
 
-#@login_required
 def index(request):
     # Filtra apenas vídeos visíveis e ordena conforme necessário
     video_list = Video.objects.filter(visibilidade=True).order_by('id')
@@ -24,8 +23,6 @@ def index(request):
         'videos': videos,
         'all_videos_playlist': all_videos_playlist
     })
-
-
 @login_required
 def adm(request):
     return render(request, 'adm.html')
