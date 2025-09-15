@@ -38,7 +38,7 @@
         <iframe id="video-player"
             width="100%"
             height="100%"
-            src="https://www.youtube.com/embed/{{ selected_video.youtube_id }}"
+            src="https://www.youtube.com/embed/{{ selected_video.youtube_id }}?enablejsapi=1"
             title="YouTube video player"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -88,6 +88,17 @@
         // Adiciona evento para os checkboxes de vídeos concluídos
         document.addEventListener('DOMContentLoaded', function() {
             const checkboxes = document.querySelectorAll('.video-completed-checkbox');
+            let player;
+            let currentVideoId = "{{ selected_video.id }}";
+            let videoWatchedPercentage = 0;
+            let videoCompleted = false;
+            
+            // Verifica se o vídeo já está marcado como concluído ao carregar a página
+            const initialCheckbox = document.querySelector(`#video-completed-${currentVideoId}`);
+            if (initialCheckbox) {
+                videoCompleted = initialCheckbox.checked;
+                console.log(`Estado inicial do vídeo ${currentVideoId}: ${videoCompleted ? 'concluído' : 'não concluído'}`);
+            }
             
             // Aplica a classe 'video-completed' aos vídeos já concluídos
             checkboxes.forEach(checkbox => {
@@ -141,6 +152,179 @@
                 }
                 return cookieValue;
             }
+            
+            // Função para marcar o vídeo como concluído automaticamente
+            function markVideoAsCompleted() {
+                if (videoCompleted) return; // Evita múltiplas chamadas
+                
+                const checkbox = document.querySelector(`#video-completed-${currentVideoId}`);
+                if (checkbox && !checkbox.checked) {
+                    console.log('Marcando vídeo como concluído automaticamente');
+                    checkbox.checked = true;
+                    const container = checkbox.closest('.video-link-container');
+                    container.classList.add('video-completed');
+                    
+                    // Envia requisição para marcar o vídeo como concluído
+                    fetch(`/playlist/video/${currentVideoId}/toggle-completed/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        videoCompleted = true;
+                        console.log('Vídeo marcado como concluído:', data);
+                    })
+                    .catch(error => {
+                        console.error('Erro ao marcar vídeo como concluído:', error);
+                    });
+                }
+            }
+            
+            // Carrega a API do YouTube
+            console.log('Carregando API do YouTube...');
+            var tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            
+            // Verifica se o iframe já existe e tem o parâmetro enablejsapi
+            const iframe = document.getElementById('video-player');
+            if (iframe) {
+                console.log('Iframe encontrado:', iframe);
+                const src = iframe.getAttribute('src');
+                if (src && !src.includes('enablejsapi=1')) {
+                    console.log('Adicionando parâmetro enablejsapi ao iframe');
+                    iframe.setAttribute('src', src + (src.includes('?') ? '&' : '?') + 'enablejsapi=1');
+                }
+            } else {
+                console.error('Iframe não encontrado');
+            }
+            
+            // Função chamada quando a API do YouTube está pronta
+            window.onYouTubeIframeAPIReady = function() {
+                console.log('API do YouTube pronta');
+                player = new YT.Player('video-player', {
+                    events: {
+                        'onStateChange': onPlayerStateChange,
+                        'onReady': onPlayerReady
+                    }
+                });
+                console.log('Player inicializado:', player);
+            };
+            
+            // Quando o player estiver pronto
+            function onPlayerReady(event) {
+                console.log('Player pronto', event.target);
+                
+                // Verifica se o player foi inicializado corretamente
+                if (event.target && typeof event.target.getCurrentTime === 'function') {
+                    console.log('Player inicializado corretamente');
+                    player = event.target; // Garante que o player está corretamente atribuído
+                } else {
+                    console.error('Player não foi inicializado corretamente');
+                }
+                
+                // Verifica se o vídeo já está marcado como concluído
+                const checkbox = document.querySelector(`#video-completed-${currentVideoId}`);
+                if (checkbox) {
+                    videoCompleted = checkbox.checked;
+                    console.log(`Vídeo ${currentVideoId} já concluído: ${videoCompleted}`);
+                } else {
+                    console.log(`Checkbox para vídeo ${currentVideoId} não encontrado`);
+                }
+                
+                // Inicia o monitoramento do progresso se o vídeo estiver em reprodução
+                if (player && player.getPlayerState && player.getPlayerState() === YT.PlayerState.PLAYING) {
+                    console.log('Vídeo já está em reprodução, iniciando monitoramento');
+                    checkVideoProgress();
+                }
+            }
+            
+            // Quando o estado do player mudar
+            function onPlayerStateChange(event) {
+                console.log('Estado do player mudou:', event.data);
+                
+                // Se o vídeo estiver em reprodução, inicia o monitoramento do progresso
+                if (event.data == YT.PlayerState.PLAYING) {
+                    console.log('Vídeo começou a ser reproduzido, iniciando monitoramento');
+                    checkVideoProgress();
+                }
+                // Se o vídeo terminar, marca como concluído
+                if (event.data == YT.PlayerState.ENDED) {
+                    console.log('Vídeo terminou, marcando como concluído');
+                    markVideoAsCompleted();
+                }
+            }
+            
+            // Verifica o progresso do vídeo a cada segundo
+            function checkVideoProgress() {
+                if (!player) {
+                    console.log('Player não inicializado, tentando novamente em 1 segundo');
+                    setTimeout(checkVideoProgress, 1000);
+                    return;
+                }
+                
+                console.log('Iniciando monitoramento de progresso do vídeo');
+                const interval = setInterval(() => {
+                    try {
+                        if (!player || player.getPlayerState === undefined) {
+                            console.log('Player não está disponível');
+                            clearInterval(interval);
+                            return;
+                        }
+                        
+                        if (player.getPlayerState() !== YT.PlayerState.PLAYING) {
+                            console.log('Vídeo não está em reprodução, estado:', player.getPlayerState());
+                            return; // Não limpa o intervalo, apenas pula esta verificação
+                        }
+                        
+                        const currentTime = player.getCurrentTime();
+                        const duration = player.getDuration();
+                        videoWatchedPercentage = (currentTime / duration) * 100;
+                        
+                        console.log(`Progresso: ${videoWatchedPercentage.toFixed(2)}% (${currentTime.toFixed(2)}/${duration.toFixed(2)})`);
+                        
+                        // Se o usuário assistiu pelo menos 90% do vídeo, marca como concluído
+                        if (videoWatchedPercentage >= 90) {
+                            console.log('Atingiu 90% do vídeo, marcando como concluído');
+                            markVideoAsCompleted();
+                            clearInterval(interval);
+                        }
+                    } catch (error) {
+                        console.error('Erro ao verificar progresso:', error);
+                        clearInterval(interval);
+                    }
+                }, 1000);
+            }
+            
+            // Adiciona evento para os links de vídeo na barra lateral
+            const videoLinks = document.querySelectorAll('.video-link');
+            videoLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const youtubeId = this.dataset.videoId;
+                    currentVideoId = this.dataset.videoDbId;
+                    videoWatchedPercentage = 0;
+                    videoCompleted = false;
+                    
+                    // Verifica se o vídeo já está marcado como concluído
+                    const checkbox = document.querySelector(`#video-completed-${currentVideoId}`);
+                    if (checkbox) {
+                        videoCompleted = checkbox.checked;
+                    }
+                    
+                    // Atualiza o iframe com o novo vídeo
+                    if (player) {
+                        player.loadVideoById(youtubeId);
+                    } else {
+                        document.getElementById('video-player').src = `https://www.youtube.com/embed/${youtubeId}?enablejsapi=1`;
+                    }
+                });
+            });
         });
     </script>
 {% endblock %}
