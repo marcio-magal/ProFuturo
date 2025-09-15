@@ -24,10 +24,35 @@
         cursor: pointer;
     }
     
+    /* Estilo para vídeo atual */
+    .video-current {
+        background-color: #cfe2ff !important;
+        border-left: 5px solid #0d6efd !important;
+        padding-left: 12px !important;
+        margin-left: -5px !important;
+        margin-right: -5px !important;
+        box-shadow: 0 0 5px rgba(13, 110, 253, 0.3) !important;
+    }
+    
+    .video-current .video-link {
+        font-weight: bold;
+        color: #0d6efd !important;
+    }
+    
     /* Estilo para vídeos concluídos */
     .video-completed .video-link {
         color: #6c757d;
         text-decoration: line-through;
+    }
+    
+    /* Estilo para o vídeo atual sendo assistido */
+    .video-current {
+        background-color: #e9ecef;
+        border-left: 4px solid #01205F;
+    }
+    
+    .video-current .video-link {
+        font-weight: bold;
     }
 </style>
 {% endblock %}
@@ -98,6 +123,25 @@
             if (initialCheckbox) {
                 videoCompleted = initialCheckbox.checked;
                 console.log(`Estado inicial do vídeo ${currentVideoId}: ${videoCompleted ? 'concluído' : 'não concluído'}`);
+                
+                // Destaca o vídeo atual na barra lateral com estilos inline
+                const currentVideoContainer = initialCheckbox.closest('.video-link-container');
+                if (currentVideoContainer) {
+                    // Aplicar estilos diretamente ao elemento
+                    currentVideoContainer.style.backgroundColor = '#cfe2ff';
+                    currentVideoContainer.style.borderLeft = '5px solid #0d6efd';
+                    currentVideoContainer.style.paddingLeft = '12px';
+                    currentVideoContainer.style.marginLeft = '-5px';
+                    currentVideoContainer.style.marginRight = '-5px';
+                    currentVideoContainer.style.boxShadow = '0 0 5px rgba(13, 110, 253, 0.3)';
+                    
+                    // Aplicar estilo ao link do vídeo
+                    const videoLink = currentVideoContainer.querySelector('.video-link');
+                    if (videoLink) {
+                        videoLink.style.fontWeight = 'bold';
+                        videoLink.style.color = '#0d6efd';
+                    }
+                }
             }
             
             // Aplica a classe 'video-completed' aos vídeos já concluídos
@@ -311,6 +355,42 @@
                     videoWatchedPercentage = 0;
                     videoCompleted = false;
                     
+                    // Remove todos os estilos de destaque dos vídeos
+                    document.querySelectorAll('.video-link-container').forEach(container => {
+                        container.style.backgroundColor = '';
+                        container.style.borderLeft = '';
+                        container.style.paddingLeft = '';
+                        container.style.marginLeft = '';
+                        container.style.marginRight = '';
+                        container.style.boxShadow = '';
+                        
+                        // Restaura o estilo original do link
+                        const videoLink = container.querySelector('.video-link');
+                        if (videoLink) {
+                            videoLink.style.fontWeight = '';
+                            videoLink.style.color = '';
+                        }
+                    });
+                    
+                    // Aplica estilos inline diretamente ao vídeo selecionado
+                    const currentContainer = this.closest('.video-link-container');
+                    if (currentContainer) {
+                        // Aplicar estilos diretamente ao elemento
+                        currentContainer.style.backgroundColor = '#cfe2ff';
+                        currentContainer.style.borderLeft = '5px solid #0d6efd';
+                        currentContainer.style.paddingLeft = '12px';
+                        currentContainer.style.marginLeft = '-5px';
+                        currentContainer.style.marginRight = '-5px';
+                        currentContainer.style.boxShadow = '0 0 5px rgba(13, 110, 253, 0.3)';
+                        
+                        // Aplicar estilo ao link do vídeo
+                        const videoLink = currentContainer.querySelector('.video-link');
+                        if (videoLink) {
+                            videoLink.style.fontWeight = 'bold';
+                            videoLink.style.color = '#0d6efd';
+                        }
+                    }
+                    
                     // Verifica se o vídeo já está marcado como concluído
                     const checkbox = document.querySelector(`#video-completed-${currentVideoId}`);
                     if (checkbox) {
@@ -337,7 +417,7 @@
         </div>
         <div class="list-group list-group-flush border-bottom scrollarea">
             {% for video in videos %}
-              <div class="video-link-container list-group-item py-3 lh-sm" aria-current="true">
+              <div class="video-link-container list-group-item py-3 lh-sm {% if video.id == selected_video.id %}video-current{% endif %}" aria-current="true">
                 <div class="d-flex w-100 align-items-center justify-content-between">
                     <a href="#" class="video-link col-10" data-video-id="{{ video.youtube_id }}" data-video-db-id="{{ video.id }}">
                         <div class="mb-1 small">{{ video.title }}</div>
