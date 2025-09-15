@@ -1,5 +1,37 @@
 {% extends 'base.html' %}
 
+{% block extra_css %}
+<style>
+    .video-link-container {
+        transition: background-color 0.2s;
+    }
+    
+    .video-link-container:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .video-link {
+        text-decoration: none;
+        color: #212529;
+        display: block;
+    }
+    
+    .form-check {
+        margin-right: 5px;
+    }
+    
+    .video-completed-checkbox {
+        cursor: pointer;
+    }
+    
+    /* Estilo para vídeos concluídos */
+    .video-completed .video-link {
+        color: #6c757d;
+        text-decoration: line-through;
+    }
+</style>
+{% endblock %}
+
 {% block main %}
     <!-- Video Player -->
     <div style="width: calc(100% - 36px); aspect-ratio: 16 / 9;">
@@ -51,6 +83,66 @@
     <footer class="text-center border-top" style="padding-top: 18px;">
         <p class="text-muted">&copy; UFRA LC - 2024</p>
     </footer>
+
+    <script>
+        // Adiciona evento para os checkboxes de vídeos concluídos
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.video-completed-checkbox');
+            
+            // Aplica a classe 'video-completed' aos vídeos já concluídos
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    checkbox.closest('.video-link-container').classList.add('video-completed');
+                }
+                
+                checkbox.addEventListener('change', function() {
+                    const videoId = this.dataset.videoId;
+                    const container = this.closest('.video-link-container');
+                    
+                    // Envia requisição para marcar/desmarcar o vídeo como concluído
+                    fetch(`/playlist/video/${videoId}/toggle-completed/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Atualiza o estado do checkbox conforme a resposta do servidor
+                        this.checked = data.completed;
+                        
+                        // Atualiza a classe CSS do container
+                        if (data.completed) {
+                            container.classList.add('video-completed');
+                        } else {
+                            container.classList.remove('video-completed');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao marcar vídeo como concluído:', error);
+                    });
+                });
+            });
+            
+            // Função para obter o valor do cookie CSRF
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
 {% endblock %}
 
 {% block sidebar2 %}
@@ -61,12 +153,19 @@
         </div>
         <div class="list-group list-group-flush border-bottom scrollarea">
             {% for video in videos %}
-              <a href="#" class="video-link list-group-item list-group-item-action py-3 lh-sm" aria-current="true"
-                 data-video-id="{{ video.youtube_id }}" data-video-db-id="{{ video.id }}">
+              <div class="video-link-container list-group-item py-3 lh-sm" aria-current="true">
                 <div class="d-flex w-100 align-items-center justify-content-between">
-                    <div class="col-10 mb-1 small">{{ video.title }}</div>
+                    <a href="#" class="video-link col-10" data-video-id="{{ video.youtube_id }}" data-video-db-id="{{ video.id }}">
+                        <div class="mb-1 small">{{ video.title }}</div>
+                    </a>
+                    <div class="form-check">
+                        <input class="form-check-input video-completed-checkbox" type="checkbox" 
+                               id="video-completed-{{ video.id }}" 
+                               data-video-id="{{ video.id }}" 
+                               {% if video.id in completed_videos %}checked{% endif %}>
+                    </div>
                 </div>
-              </a>
+              </div>
             {% empty %}
                 <p>Não há vídeos nesta playlist.</p>
             {% endfor %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Video, Playlist, PlaylistVideo, Comment
+from .models import Video, Playlist, PlaylistVideo, Comment, VideoCompleted
 
 @admin.register(Video)
 class VideoAdmin(admin.ModelAdmin):
@@ -48,3 +48,9 @@ class CommentAdmin(admin.ModelAdmin):
     # Remove a opção de adicionar
     def has_add_permission(self, request):
         return False  # Desabilita adição
+
+@admin.register(VideoCompleted)
+class VideoCompletedAdmin(admin.ModelAdmin):
+    list_display = ('user', 'video', 'completed_at')
+    search_fields = ('user__username', 'video__title')
+    list_filter = ('completed_at', 'video')

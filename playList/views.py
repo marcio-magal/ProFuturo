@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from .models import Playlist, Video, VideoLike, Comment
+from .models import Playlist, Video, VideoLike, Comment, VideoCompleted
 
 @login_required
 def playlist_detail(request, playlist_id):
@@ -21,11 +21,15 @@ def playlist_detail(request, playlist_id):
     # Se `video_id` for fornecido, busca o vídeo específico
     # Caso contrário, usa o primeiro vídeo da lista `videos`
     selected_video = get_object_or_404(Video, id=video_id, visibilidade=True) if video_id else videos.first()
+    
+    # Obtém os IDs dos vídeos concluídos pelo usuário
+    completed_videos = VideoCompleted.objects.filter(user=request.user, video__in=videos).values_list('video_id', flat=True)
 
     return render(request, 'playlist.html', {
         'playlist': playlist,
         'videos': videos,
-        'selected_video': selected_video
+        'selected_video': selected_video,
+        'completed_videos': completed_videos
     })
 
 
@@ -103,3 +107,19 @@ def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id, user=request.user)
     comment.delete()
     return JsonResponse({'success': True})
+
+
+@login_required
+@require_POST
+def toggle_video_completed(request, video_id):
+    video = get_object_or_404(Video, id=video_id)
+    completed = VideoCompleted.objects.filter(user=request.user, video=video).exists()
+    
+    if completed:
+        # Se já estiver marcado como concluído, remove a marcação
+        VideoCompleted.objects.filter(user=request.user, video=video).delete()
+        return JsonResponse({'completed': False})
+    else:
+        # Se não estiver marcado como concluído, marca
+        VideoCompleted.objects.create(user=request.user, video=video)
+        return JsonResponse({'completed': True})

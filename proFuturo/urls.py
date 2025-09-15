@@ -10,7 +10,8 @@ from playList.views import (playlist_detail,
                             add_comment,
                             edit_comment,
                             delete_comment,
-                            video_data)
+                            video_data,
+                            toggle_video_completed)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -21,6 +22,7 @@ urlpatterns = [
     path('playlist/comment/add/<int:video_id>/', add_comment, name='add-comment'),
     path('playlist/comment/edit/<int:comment_id>/', edit_comment, name='edit-comment'),
     path('playlist/comment/delete/<int:comment_id>/', delete_comment, name='delete-comment'),
+    path('playlist/video/<int:video_id>/toggle-completed/', toggle_video_completed, name='toggle-video-completed'),
     path('video/cadastrar/', cadastrar_video, name='cadastrar-video'),
     path('video-data/<int:video_id>/', video_data, name='video-data'),
     path('', index, name='home'),

@@ -92,3 +92,17 @@ class Comment(models.Model):
 
     class Meta:
         verbose_name_plural = "Comentários"
+
+
+class VideoCompleted(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='completed_by')
+    completed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'video')
+        verbose_name = "Vídeo Concluído"
+        verbose_name_plural = "Vídeos Concluídos"
+
+    def __str__(self):
+        return f"{self.video.title} concluído por {self.user.username}"
