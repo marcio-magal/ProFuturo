@@ -2,6 +2,27 @@
 
 {% block extra_css %}
 <style>
+    /* Regra global para remover sublinhado com máxima especificidade */
+    .d-flex.flex-column.align-items-stretch.flex-shrink-0.bg-body-tertiary .list-group.list-group-flush.border-bottom.scrollarea .video-link-container.list-group-item a.video-link,
+    .d-flex.flex-column.align-items-stretch.flex-shrink-0.bg-body-tertiary .list-group.list-group-flush.border-bottom.scrollarea .video-link-container.list-group-item a.video-link:hover,
+    .d-flex.flex-column.align-items-stretch.flex-shrink-0.bg-body-tertiary .list-group.list-group-flush.border-bottom.scrollarea .video-link-container.list-group-item a.video-link:focus,
+    .d-flex.flex-column.align-items-stretch.flex-shrink-0.bg-body-tertiary .list-group.list-group-flush.border-bottom.scrollarea .video-link-container.list-group-item a.video-link:active,
+    .video-link-container a.video-link,
+    .video-link-container a.video-link:hover,
+    .video-link-container a.video-link:focus,
+    .video-link-container a.video-link:active,
+    .video-completed .video-link,
+    .video-completed .video-link:hover,
+    .video-completed .video-link:focus,
+    .video-completed .video-link:active {
+        text-decoration: none !important;
+        text-decoration-line: none !important;
+        text-decoration-style: none !important;
+        text-decoration-color: transparent !important;
+        text-underline-offset: 0 !important;
+        text-decoration-thickness: 0 !important;
+    }
+    
     .video-link-container {
         transition: background-color 0.2s;
     }
@@ -11,7 +32,7 @@
     }
     
     .video-link {
-        text-decoration: none;
+        text-decoration: none !important;
         color: #212529;
         display: block;
     }
@@ -42,7 +63,7 @@
     /* Estilo para vídeos concluídos */
     .video-completed .video-link {
         color: #6c757d;
-        text-decoration: line-through;
+        text-decoration: none !important;
     }
     
     /* Estilo para o vídeo atual sendo assistido */
@@ -112,6 +133,22 @@
     <script>
         // Adiciona evento para os checkboxes de vídeos concluídos
         document.addEventListener('DOMContentLoaded', function() {
+            // Remove sublinhado de todos os links de vídeo
+            function removeUnderlineFromAllVideoLinks() {
+                const videoLinks = document.querySelectorAll('.video-link');
+                videoLinks.forEach(link => {
+                    link.style.textDecoration = 'none';
+                    link.style.textDecorationLine = 'none';
+                    link.style.textDecorationStyle = 'none';
+                    link.style.textDecorationColor = 'transparent';
+                    link.style.textUnderlineOffset = '0';
+                    link.style.textDecorationThickness = '0';
+                });
+            }
+            
+            // Aplica a remoção do sublinhado imediatamente
+            removeUnderlineFromAllVideoLinks();
+            
             const checkboxes = document.querySelectorAll('.video-completed-checkbox');
             let player;
             let currentVideoId = "{{ selected_video.id }}";
